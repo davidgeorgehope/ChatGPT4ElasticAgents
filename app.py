@@ -52,6 +52,7 @@ def route_request(user_input, routing_messages, elastic_messages, normal_message
     routing_response = openai.ChatCompletion.create(
         model="gpt-4",
         messages=routing_messages,
+        temperature=0,
     )
     print(routing_response)
     route = routing_response["choices"][0]["message"]["content"].strip().lower()
@@ -68,6 +69,7 @@ def elastic_request(user_input, elastic_messages):
     elastic_response = openai.ChatCompletion.create(
         model="gpt-4",
         messages=elastic_messages,
+        temperature=0,
     )
     query = elastic_response["choices"][0]["message"]["content"].strip()
     #elastic_messages.extend(elastic_response["choices"][0]["message"])
@@ -84,6 +86,7 @@ def elastic_request(user_input, elastic_messages):
     analysis_response = openai.ChatCompletion.create(
         model="gpt-4",
         messages=analysis,
+        temperature=0,
     ) 
     print(analysis_response)
     analysis = analysis_response["choices"][0]["message"]["content"].strip()
@@ -96,6 +99,7 @@ def normal_request(user_input, normal_messages):
     normal_response = openai.ChatCompletion.create(
         model="gpt-4",
         messages=normal_messages,
+        temperature=0,
     )
     reply = normal_response["choices"][0]["message"]["content"].strip()
     #normal_messages.extend(normal_response["choices"][0]["message"])

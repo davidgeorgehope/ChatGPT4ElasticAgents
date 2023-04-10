@@ -104,7 +104,7 @@ def normal_request(user_input, normal_messages):
 
 if __name__ == "__main__":
     routing_messages = [{"role": "system", "content": 'Your job is to simply respond with "elastic_agent" or "normal_agent" and nothing else, no commentary. If any subsequent prompts can be turned into an elastic search query you will respond "elastic_agent" or if you think they cannot you will respond "normal_agent".'}]
-    elastic_messages = [{"role": "system", "content": 'From this prompt forward I want you to generate elasticsearch queries to help me with my request. Do not provide any commentary, just a query. Note that the data in here conforms to the Elastic Common Schema standard'}]
+    elastic_messages = [{"role": "system", "content": 'From this prompt forward I want you to generate elasticsearch queries to help me with my request. Do not provide any commentary, just a query. Note that the data in here conforms to the Elastic Common Schema standard, and that exceptions can be found by checking for messages with Exception in them'}]
     normal_messages = [{"role": "system", "content": "You are the normal agent, execute chatgpt prompts as normal."}]
 
 #    while True:

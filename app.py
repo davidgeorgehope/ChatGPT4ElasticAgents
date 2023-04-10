@@ -111,11 +111,4 @@ if __name__ == "__main__":
     elastic_messages = [{"role": "system", "content": 'From this prompt forward I want you to generate elasticsearch queries to help me with my request. Do not provide any commentary, just a query. Note that the data in here conforms to the Elastic Common Schema standard, and that exceptions can be found by checking for messages with Exception in them'}]
     normal_messages = [{"role": "system", "content": "You are the normal agent, execute chatgpt prompts as normal."}]
 
-#    while True:
-#        user_input = input("User: ")
-#        if user_input.lower() == "exit":
-#            break
-
-#        response = route_request(user_input, routing_messages, elastic_messages, normal_messages)
-#        print("Agent: ", response)
     app.run(host="localhost", port=8080, debug=True)

@@ -77,6 +77,7 @@ def elastic_request(user_input, elastic_messages):
     json_data = json.loads(query)
 
     search_results = es.search(body=json_data)
+    print(search_results)
 
     top_result = search_results["hits"]["hits"][0]["_source"] if search_results["hits"]["hits"] else "No results found."
 

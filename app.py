@@ -49,30 +49,40 @@ def message():
 
 
 def elastic_request(user_input):
+    
     body = {
-    "query": {
-        "text_expansion": {
-        "ml.tokens": {
-            "model_id": ".elser_model_1",
-            "model_text": ""+user_input
-        }
+        "query": {
+            "bool": {
+                "must": [
+                    {
+                        "text_expansion": {
+                            "ml.tokens": {
+                                "model_id": ".elser_model_1",
+                                "model_text": "{}".format(user_input)
+                            }
+                        }
+                    }#,
+                    #{
+                    #    "range" : {
+                    #        "timestamp" : {
+                    #            "gte" : "now-128h",
+                    #            "lte" : "now"
+                    #        }
+                    #    }
+                    #}
+                ]
+            }
         },
-        "range" : {
-      "timestamp" : {
-        "gte" : "now-24h",
-        "lte" : "now"
-      }
+        "size": 3,
+        "sort": [
+            {
+                "_score": {
+                    "order": "desc"
+                }
+            }
+        ]
     }
-    },
-    "size": 3,
-    "sort": [
-        {
-        "_score": {
-            "order": "desc"
-        }
-        }
-    ]
-    }
+
 
     search_results = es.search(body=body)
 

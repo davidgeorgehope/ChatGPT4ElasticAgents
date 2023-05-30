@@ -56,7 +56,13 @@ def elastic_request(user_input):
             "model_id": ".elser_model_1",
             "model_text": ""+user_input
         }
-        }
+        },
+        "range" : {
+      "timestamp" : {
+        "gte" : "now-24h",
+        "lte" : "now"
+      }
+    }
     },
     "size": 3,
     "sort": [

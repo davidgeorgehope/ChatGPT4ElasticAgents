@@ -92,7 +92,7 @@ def elastic_request(user_input):
     analysis=[{"role": "system", "content": "You are a Site Reliability Engineer, please review logs messages and suggest the root cause."},
               {"role": "user", "content": analysis_input}]
     analysis_response = llm.chat.completions.create(
-        model="grok-4.3",
+        model="grok-4.7",
         messages=analysis,
         temperature=0,
     ) 

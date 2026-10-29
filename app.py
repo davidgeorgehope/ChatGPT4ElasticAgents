@@ -1,10 +1,7 @@
-import openai
+from openai import OpenAI
 import random
 import json
 from elasticsearch import Elasticsearch
-
-# Replace with your API key
-openai.api_key = "your_openai_api_key_here"
 
 from elasticsearch import Elasticsearch
 
@@ -14,9 +11,9 @@ import threading
 
 app = Flask(__name__)
 
-# Initialize variables for Elasticsearch and OpenAI clients
+# Initialize variables for Elasticsearch and xAI (Grok) clients
 es = None
-openai.api_key = None
+llm = None
 
 @app.route('/')
 def index():
@@ -24,8 +21,8 @@ def index():
 
 @app.route('/config', methods=['POST'])
 def config():
-    global es, openai
-    openai.api_key = request.form['openai_key']
+    global es, llm
+    llm = OpenAI(api_key=request.form['xai_key'], base_url="https://api.x.ai/v1")
     es_host = request.form['es_host']
     es_port = int(request.form['es_port'])
     es_username = request.form['es_username']
@@ -40,8 +37,8 @@ def config():
 
 @app.route('/message', methods=['POST'])
 def message():
-    if not es or not openai.api_key:
-        return jsonify({'error': 'Configuration is missing. Please provide the OpenAI API key and Elasticsearch details.'}), 400
+    if not es or not llm:
+        return jsonify({'error': 'Configuration is missing. Please provide the xAI API key and Elasticsearch details.'}), 400
 
     user_input = request.form['user_input']
     response = elastic_request(user_input)
@@ -94,13 +91,13 @@ def elastic_request(user_input):
     analysis_input = f"With the following user input {user_input} please analyze the following two log messages: {top_result} AND {second_result}"
     analysis=[{"role": "system", "content": "You are a Site Reliability Engineer, please review logs messages and suggest the root cause."},
               {"role": "user", "content": analysis_input}]
-    analysis_response = openai.ChatCompletion.create(
-        model="gpt-4",
+    analysis_response = llm.chat.completions.create(
+        model="grok-4.3",
         messages=analysis,
         temperature=0,
     ) 
     print(analysis_response)
-    analysis = analysis_response["choices"][0]["message"]["content"].strip()
+    analysis = (analysis_response.choices[0].message.content or "").strip()
 
     return analysis
 
